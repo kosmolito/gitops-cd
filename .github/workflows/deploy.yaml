@@ -4,12 +4,15 @@ on:
   repository_dispatch:
     types: [deploy]
 
+permissions:
+  contents: write
+
 jobs:
   update-manifest:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout GitOps repo
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Update deployment image
@@ -18,13 +21,13 @@ jobs:
 
           sed -i "s|image:.*|image: ${IMAGE}|g" manifests/deployment.yaml
 
-      - name: Commit changes
+      - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
           git add manifests/deployment.yaml
 
-          git commit -m "Deploy ${IMAGE}" || echo "No changes"
+          git commit -m "Deploy" || echo "No changes"
 
-          git push
+          git push origin main
