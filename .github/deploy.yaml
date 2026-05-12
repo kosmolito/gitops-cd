@@ -1,0 +1,30 @@
+name: Update Deployment
+
+on:
+  repository_dispatch:
+    types: [deploy]
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout GitOps repo
+        uses: actions/checkout@v3
+
+      - name: Update deployment image
+        run: |
+          IMAGE="${{ github.event.client_payload.image }}"
+
+          sed -i "s|image:.*|image: ${IMAGE}|g" manifests/deployment.yaml
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git add manifests/deployment.yaml
+
+          git commit -m "Deploy ${IMAGE}" || echo "No changes"
+
+          git push
