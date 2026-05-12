@@ -28,6 +28,6 @@ jobs:
 
           git add manifests/deployment.yaml
 
-          git commit -m "Deploy" || echo "No changes"
+          git commit -m "Update deployment image to ${IMAGE}" || echo "No changes to commit"
 
           git push origin main
