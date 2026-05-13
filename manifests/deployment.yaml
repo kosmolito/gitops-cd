@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: docker.io/kosmolito/gitops-ci:0524499
+          image: docker.io/kosmolito/gitops-ci:7af7a54
           ports:
             - containerPort: 80
           livenessProbe:
